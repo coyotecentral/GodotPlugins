@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://fxqg7s5f36oq"]
+
+[ext_resource type="Script" path="res://addons/coyote_central/lib/StateMachine.gd" id="1_s3s2y"]
+[ext_resource type="PackedScene" uid="uid://co3vd2wv7q123" path="res://addons/coyote_central/characters/barbarian/Barbarian.glb" id="2_kl6w5"]
+[ext_resource type="Script" path="res://addons/coyote_central/lib/GLBAnimationBridge.gd" id="3_t220s"]
+
+[node name="Barbarian" type="Node3D"]
+
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("1_s3s2y")
+
+[node name="GLBAnimationBridge" type="Node" parent="." node_paths=PackedStringArray("model")]
+script = ExtResource("3_t220s")
+model = NodePath("../Barbarian")
+current_animation = ""
+speed_scale = 1.0
+
+[node name="Barbarian" parent="." instance=ExtResource("2_kl6w5")]

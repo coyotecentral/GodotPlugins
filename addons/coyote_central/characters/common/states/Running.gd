@@ -27,4 +27,5 @@ func process_physics(delta: float) -> State:
 	if direction.length() > 1:
 		direction = direction.normalized()
 	parent.position -= parent.global_transform.basis * (direction * parent.stats.move_speed * delta)
+	parent.move_and_slide()
 	return null

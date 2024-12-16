@@ -7,14 +7,20 @@ var _scene: PackedScene = preload("res://addons/coyote_central/characters/barbar
 @export var stats: CharacterStats
 var state_machine: StateMachine
 
-
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	var scene = _scene.instantiate()
+	var _children = []
+	if not Engine.is_editor_hint():
+		for c in get_children():
+			_children.push_back(c)
+	if not Engine.is_editor_hint():
+		for c in _children:
+			c.reparent(scene)
 	add_child(scene)
+	scene.stats = stats
 	state_machine = scene.get_node("CharacterStateMachine")
-	state_machine.init(self)
+	state_machine.init(scene)
 
 
 func _process(delta: float) -> void:

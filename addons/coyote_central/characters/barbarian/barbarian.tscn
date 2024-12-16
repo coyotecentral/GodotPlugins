@@ -1,6 +1,7 @@
-[gd_scene load_steps=26 format=3 uid="uid://bsejac6ns3i21"]
+[gd_scene load_steps=27 format=3 uid="uid://bsejac6ns3i21"]
 
 [ext_resource type="PackedScene" uid="uid://c44p1vqrg7jch" path="res://addons/coyote_central/characters/barbarian/rig.tscn" id="1_7dw6h"]
+[ext_resource type="Script" path="res://addons/coyote_central/characters/barbarian/_barbarian.gd" id="1_7voax"]
 [ext_resource type="AnimationLibrary" uid="uid://bi4xurjrp14xt" path="res://addons/coyote_central/characters/barbarian/animations.res" id="2_fnk1o"]
 [ext_resource type="Script" path="res://addons/coyote_central/characters/lib/CharacterStateMachine.gd" id="3_e4jur"]
 [ext_resource type="Script" path="res://addons/coyote_central/characters/common/states/Idle.gd" id="3_gaqxg"]
@@ -91,6 +92,7 @@ transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition
 graph_offset = Vector2(-850.438, -119)
 
 [node name="Barbarian" type="CharacterBody3D"]
+script = ExtResource("1_7voax")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)

@@ -29,7 +29,8 @@ func init(p) -> void:
 		child.init()
 
 func change_state(next_state: State) -> void:
-	print("Changing state to: %s" % next_state._animation_name)
+	if debug:
+		print("Changing state to: %s" % next_state._animation_name)
 	super(next_state)
 
 func _ready():

@@ -4,6 +4,7 @@ class_name Barbarian
 
 var _scene: PackedScene = preload("res://addons/coyote_central/characters/barbarian/barbarian.tscn")
 
+@export var stats: CharacterStats
 var state_machine: StateMachine
 
 

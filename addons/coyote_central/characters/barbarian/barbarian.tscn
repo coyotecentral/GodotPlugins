@@ -152,12 +152,14 @@ bones/47/rotation = Quaternion(0.758253, 1.52737e-07, -0.651961, 1.11759e-08)
 
 [node name="1H_Axe_Offhand" parent="Rig/Skeleton3D" index="0"]
 transform = Transform3D(8.54942e-07, 0.262863, 0.964833, 0.999999, -2.20542e-07, -2.78177e-08, 6.32803e-07, 0.964832, -0.262863, 0.516524, 0.636705, 0.0136164)
+visible = false
 
 [node name="Barbarian_Round_Shield" parent="Rig/Skeleton3D" index="1"]
 transform = Transform3D(6.43451e-07, 0.262863, 0.964833, 0.999999, -2.74099e-06, 8.78063e-07, 3.30274e-06, 0.964832, -0.262863, 0.662643, 0.636705, -0.0430842)
 
 [node name="1H_Axe" parent="Rig/Skeleton3D" index="2"]
 transform = Transform3D(-8.12515e-07, -0.149894, 0.988702, 0.999999, -4.17281e-08, -1.61164e-08, 6.04102e-07, 0.988701, 0.149894, -0.496054, 0.64103, 0.139528)
+visible = false
 
 [node name="2H_Axe" parent="Rig/Skeleton3D" index="3"]
 transform = Transform3D(-8.12515e-07, -0.149894, 0.988702, 0.999999, -4.17281e-08, -1.61164e-08, 6.04102e-07, 0.988701, 0.149894, -0.496054, 0.64103, 0.139528)

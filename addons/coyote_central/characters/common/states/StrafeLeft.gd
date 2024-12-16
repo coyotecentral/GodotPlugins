@@ -9,7 +9,6 @@ extends CharacterState
 func process_physics(delta: float) -> State:
 	var vector = movement_controller.get_vector()
 	var angle = rad_to_deg(vector.angle())
-	print(angle)
 
 	# See: ./Idle.gd
 	if (angle >= -45 and angle <= 0) or \
@@ -17,7 +16,6 @@ func process_physics(delta: float) -> State:
 		return strafe_right
 	elif (angle > -133.13 and angle < -87) or \
 		(angle > 46.0 and angle < 133.0):
-		print("run")
 		return running
 	
 	if vector.length() == 0:

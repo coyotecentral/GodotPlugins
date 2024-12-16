@@ -14,6 +14,7 @@ class_name ThirdPersonCamera3D
 
 @export_group("Mouse Control")
 @export var use_mouse: bool = false
+@export_range(0, 1) var mouse_x_sensitivity = 0.1
 var _delta: float = 0.0
 
 var camera_state = "follow"
@@ -31,13 +32,16 @@ func _get_configuration_warnings() -> PackedStringArray:
 func get_camera_velocity(d: float):
 	return 5.0 * d / max_follow_distance
 
+func rotate_camera(relative: float, sensitivity: float) -> void:
+	camera_state = "rotate"
+	var target_parent = target.get_parent().get_parent()
+	target_parent.rotation.y -= relative * (PI * sensitivity / 2) * _delta
+
 func _input(event: InputEvent):
 	if not use_mouse:
 		return
 	if event is InputEventMouseMotion:
-		camera_state = "rotate"
-		var target_parent = target.get_parent()
-		target_parent.rotation.y -= event.relative.y * PI  * _delta
+		rotate_camera(event.relative.x, mouse_x_sensitivity * 0.125)
 	else:
 		camera_state = "follow"
 
@@ -46,8 +50,14 @@ func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint() and not target:
 		return
 	
+	if not Engine.is_editor_hint():
+		var look = Input.get_axis("look_left", "look_right")
+		if look != 0:
+			rotate_camera(look, 2)
+
+
+	var distance = (global_position - target.global_position).length()
 	if camera_state == "follow":
-		var distance = (global_position - target.global_position).length()
 		var target_basis = Basis(target.global_transform.basis)
 		# TODO:
 		# Calculate the difference between the angles of this basis and the target's, then
@@ -57,4 +67,4 @@ func _physics_process(delta: float) -> void:
 	if camera_state == "rotate":
 		var target_basis = Basis(target.global_transform.basis)
 		global_transform.basis = target_basis
-		position = target.global_position
+		position = position.move_toward(target.global_position, get_camera_velocity(distance) * delta)

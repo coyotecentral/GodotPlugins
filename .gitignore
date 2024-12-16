@@ -17,3 +17,5 @@ mono_crash.*.json
 test.tscn
 Models
 *.tmp
+
+barbarian_2.tscn

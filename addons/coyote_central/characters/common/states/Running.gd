@@ -5,11 +5,15 @@ extends CharacterState
 @export var idle: State
 @export var strafe_left: State
 @export var strafe_right: State
+@export var jump: State
 
 
 func process_physics(delta: float) -> State:
 	var vector: Vector2 = movement_controller.get_vector()
 	var angle: float = rad_to_deg(vector.angle())
+
+	if movement_controller.is_jump_just_pressed():
+		return jump
 
 	if vector.length() == 0:
 		return idle

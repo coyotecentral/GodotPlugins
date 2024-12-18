@@ -5,10 +5,18 @@ extends CharacterState
 @export var running: State
 @export var strafe_right: State
 @export var strafe_left: State
+@export var fall: State
+@export var jump: State
 
 func process_physics(delta: float) -> State:
 	var vector = movement_controller.get_vector()
 	var angle = rad_to_deg(vector.angle())
+
+	if not parent.is_on_floor():
+		return fall
+	
+	if movement_controller.is_jump_just_pressed():
+		return jump
 
 	if vector.length() > 0:
 		# Idk why, but when using arrow keys/keyboard, the vector angle tends to be off.

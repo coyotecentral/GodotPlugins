@@ -16,6 +16,8 @@ mono_crash.*.json
 
 test.tscn
 Models
+Assets
 *.tmp
+.DS_Store
 
 barbarian_2.tscn

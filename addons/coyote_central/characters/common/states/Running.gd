@@ -30,6 +30,7 @@ func process_physics(delta: float) -> State:
 	var direction = Vector3(vector.x, 0, vector.y)
 	if direction.length() > 1:
 		direction = direction.normalized()
-	parent.position -= parent.global_transform.basis * (direction * parent.stats.move_speed * delta)
+	# parent.position -= parent.global_transform.basis * (direction * parent.stats.move_speed * delta)
+	parent.velocity = direction * -parent.stats.move_speed
 	parent.move_and_slide()
 	return null

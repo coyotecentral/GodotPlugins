@@ -8,6 +8,11 @@ extends CharacterState
 @export var fall: State
 @export var jump: State
 
+func enter() -> void:
+	# Reset velocities to 0
+	super()
+	parent.velocity = Vector3()
+
 func process_physics(delta: float) -> State:
 	var vector = movement_controller.get_vector()
 	var angle = rad_to_deg(vector.angle())

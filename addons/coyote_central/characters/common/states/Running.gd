@@ -17,13 +17,13 @@ func process_physics(delta: float) -> State:
 
 	if vector.length() == 0:
 		return idle
-
+	
 	# See: ./Idle.gd
 	if (angle >= -180.0 and angle < -133.13) or \
-		(angle >= 133.0 and angle <= 180.0): 
+		(angle >= 133.0 and angle <= 180.0):
 		return strafe_left
-	elif (angle >= -45 and angle <= 0) or \
-		(angle >= 0 and angle <= 46):
+	elif (angle > -46.0 and angle <= 0) or \
+		(angle >= 0 and angle <= 46.0):
 		return strafe_right
 
 

@@ -1,0 +1,96 @@
+[gd_scene load_steps=15 format=3 uid="uid://begupqpm3b0bb"]
+
+[ext_resource type="Script" path="res://addons/coyote_central/characters/knight/_knight.gd" id="1_gmuot"]
+[ext_resource type="PackedScene" uid="uid://dvqmi2ahvh24x" path="res://addons/coyote_central/characters/knight/rig.tscn" id="1_wlolq"]
+[ext_resource type="AnimationLibrary" uid="uid://cvar5w5wyqx8y" path="res://addons/coyote_central/characters/knight/animation_library.res" id="2_ceskj"]
+[ext_resource type="Script" path="res://addons/coyote_central/characters/lib/CharacterStateMachine.gd" id="3_ad1e5"]
+[ext_resource type="Script" path="res://addons/coyote_central/characters/common/scripts/states/Idle.gd" id="4_3bjj6"]
+[ext_resource type="Script" path="res://addons/coyote_central/characters/common/scripts/states/Running.gd" id="5_t6ft8"]
+[ext_resource type="Script" path="res://addons/coyote_central/characters/common/scripts/states/StrafeLeft.gd" id="6_payem"]
+[ext_resource type="Script" path="res://addons/coyote_central/characters/common/scripts/states/StrafeRight.gd" id="7_y2e4r"]
+[ext_resource type="Script" path="res://addons/coyote_central/characters/common/scripts/states/Jump.gd" id="8_e0o65"]
+[ext_resource type="Script" path="res://addons/coyote_central/characters/common/scripts/states/Fall.gd" id="9_8emod"]
+[ext_resource type="AnimationNodeBlendTree" uid="uid://b8shgd1jpp7mh" path="res://addons/coyote_central/characters/common/resources/animation_blend_tree.tres" id="11_fscea"]
+[ext_resource type="Script" path="res://addons/coyote_central/characters/common/scripts/PlayerMovementController.gd" id="11_xo5sp"]
+[ext_resource type="Script" path="res://addons/coyote_central/characters/common/scripts/AnimationController.gd" id="12_kestb"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_aag0y"]
+
+[node name="Node3D" type="CharacterBody3D"]
+script = ExtResource("1_gmuot")
+
+[node name="Rig" parent="." instance=ExtResource("1_wlolq")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"animations": ExtResource("2_ceskj")
+}
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_aag0y")
+
+[node name="MovementStateMachine" type="Node" parent="." node_paths=PackedStringArray("animation_tree", "movement_controller", "starting_state")]
+script = ExtResource("3_ad1e5")
+animation_tree = NodePath("../AnimationTree")
+movement_controller = NodePath("../MovementController")
+playback_parameter_path = "parameters/MovementStateMachine/playback"
+starting_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="MovementStateMachine" node_paths=PackedStringArray("running", "strafe_right", "strafe_left", "fall", "jump")]
+script = ExtResource("4_3bjj6")
+running = NodePath("../Running")
+strafe_right = NodePath("../StrafeRight")
+strafe_left = NodePath("../StrafeLeft")
+fall = NodePath("../Fall")
+jump = NodePath("../Jump")
+animation_tree_node = "Idle"
+
+[node name="Running" type="Node" parent="MovementStateMachine" node_paths=PackedStringArray("idle", "strafe_left", "strafe_right", "jump")]
+script = ExtResource("5_t6ft8")
+idle = NodePath("../Idle")
+strafe_left = NodePath("../StrafeLeft")
+strafe_right = NodePath("../StrafeRight")
+jump = NodePath("../Jump")
+animation_tree_node = "Running"
+
+[node name="StrafeLeft" type="Node" parent="MovementStateMachine" node_paths=PackedStringArray("idle", "running", "strafe_right", "jump")]
+script = ExtResource("6_payem")
+idle = NodePath("../Idle")
+running = NodePath("../Running")
+strafe_right = NodePath("../StrafeRight")
+jump = NodePath("../Jump")
+animation_tree_node = "StrafeLeft"
+
+[node name="StrafeRight" type="Node" parent="MovementStateMachine" node_paths=PackedStringArray("idle", "running", "strafe_left", "jump")]
+script = ExtResource("7_y2e4r")
+idle = NodePath("../Idle")
+running = NodePath("../Running")
+strafe_left = NodePath("../StrafeLeft")
+jump = NodePath("../Jump")
+animation_tree_node = "StrafeRight"
+
+[node name="Jump" type="Node" parent="MovementStateMachine" node_paths=PackedStringArray("fall_state")]
+script = ExtResource("8_e0o65")
+fall_state = NodePath("../Fall")
+animation_tree_node = "Jump"
+
+[node name="Fall" type="Node" parent="MovementStateMachine" node_paths=PackedStringArray("idle", "running", "strafe_left", "strafe_right")]
+script = ExtResource("9_8emod")
+idle = NodePath("../Idle")
+running = NodePath("../Running")
+strafe_left = NodePath("../StrafeLeft")
+strafe_right = NodePath("../StrafeRight")
+animation_tree_node = "Fall"
+
+[node name="MovementController" type="Node" parent="."]
+script = ExtResource("11_xo5sp")
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = ExtResource("11_fscea")
+anim_player = NodePath("../AnimationPlayer")
+parameters/AttackOneShot/active = false
+parameters/AttackOneShot/internal_active = false
+parameters/AttackOneShot/request = 0
+parameters/Blend2/blend_amount = 0
+script = ExtResource("12_kestb")

@@ -3,14 +3,7 @@ extends StateMachine
 class_name CharacterStateMachine
 
 @export var debug: bool = false
-@export var animation_tree: AnimationTree :
-	set(v):
-		animation_tree = v
-		for child in get_children():
-			if child is CharacterState:
-				_set_child_animation_tree(child, v)
-	get:
-		return animation_tree
+@export var animation_tree: AnimationTree
 
 @export var movement_controller: MovementController :
 	set(v):
@@ -21,6 +14,14 @@ class_name CharacterStateMachine
 	get:
 		return movement_controller
 
+@export var playback_parameter_path: String = "parameters/playback" :
+	set(v):
+		playback_parameter_path = v
+		for c in get_children():
+			if animation_tree and c is CharacterState:
+				c._anim_state_machine = animation_tree.get(v)
+	get:
+		return playback_parameter_path
 
 func init(p) -> void:
 	_init_common()
@@ -46,9 +47,6 @@ func _init_common():
 	for child in get_children():
 		_setup_child(child)
 
-func _set_child_animation_tree(c: CharacterState, tree: AnimationTree):
-	c.animation_tree = tree
-
 func _set_child_movement_controller(c: CharacterState, controller: MovementController):
 	c.movement_controller = controller
 
@@ -57,6 +55,4 @@ func _setup_child(c: CharacterState):
 	if movement_controller:
 		c.movement_controller = movement_controller
 	if animation_tree:
-		c.animation_tree = animation_tree
-	c.parent = parent
-	c.init()
+		c._anim_state_machine = animation_tree.get(playback_parameter_path)

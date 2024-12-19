@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://bsejac6ns3i21"]
+[gd_scene load_steps=15 format=3 uid="uid://bsejac6ns3i21"]
 
 [ext_resource type="PackedScene" uid="uid://c44p1vqrg7jch" path="res://addons/coyote_central/characters/barbarian/rig.tscn" id="1_7dw6h"]
 [ext_resource type="Script" path="res://addons/coyote_central/characters/barbarian/_barbarian.gd" id="1_7voax"]
@@ -11,144 +11,11 @@
 [ext_resource type="Script" path="res://addons/coyote_central/characters/common/states/StrafeRight.gd" id="6_s6tjo"]
 [ext_resource type="Script" path="res://addons/coyote_central/characters/common/states/Jump.gd" id="9_2o6iq"]
 [ext_resource type="Script" path="res://addons/coyote_central/characters/common/states/Fall.gd" id="10_cc3yi"]
+[ext_resource type="AnimationNodeBlendTree" uid="uid://b8shgd1jpp7mh" path="res://addons/coyote_central/characters/barbarian/animation_blend_tree.tres" id="12_6myd7"]
+[ext_resource type="Script" path="res://addons/coyote_central/characters/barbarian/AnimationController.gd" id="13_41f07"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_et7cq"]
 height = 2.5
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_htppr"]
-animation = &"animations/Jump_Idle"
-use_custom_timeline = true
-timeline_length = 1.0
-stretch_time_scale = true
-start_offset = 0.0
-loop_mode = 1
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2gts2"]
-animation = &"animations/Idle"
-use_custom_timeline = true
-timeline_length = 1.0
-stretch_time_scale = true
-start_offset = 0.0
-loop_mode = 1
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_hd80k"]
-animation = &"animations/Jump_Start"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_4jwe7"]
-animation = &"animations/Jump_Land"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_kjxjf"]
-animation = &"animations/Running_A"
-use_custom_timeline = true
-timeline_length = 0.75
-stretch_time_scale = true
-start_offset = 0.0
-loop_mode = 1
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_yqswy"]
-animation = &"animations/Running_Strafe_Left"
-use_custom_timeline = true
-timeline_length = 0.75
-stretch_time_scale = true
-start_offset = 0.0
-loop_mode = 1
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_6ciuc"]
-animation = &"animations/Running_Strafe_Right"
-use_custom_timeline = true
-timeline_length = 0.75
-stretch_time_scale = true
-start_offset = 0.0
-loop_mode = 1
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_c4byh"]
-advance_mode = 2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_org7k"]
-xfade_time = 0.15
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_rmqn5"]
-xfade_time = 0.15
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_f4amm"]
-xfade_time = 0.1
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_8f1bn"]
-xfade_time = 0.1
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_iaf1r"]
-xfade_time = 0.1
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_myinq"]
-xfade_time = 0.1
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_x6n6d"]
-xfade_time = 0.1
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_c42ld"]
-xfade_time = 0.1
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ura5f"]
-xfade_time = 0.1
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_kj54a"]
-xfade_time = 0.1
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_wolt6"]
-xfade_time = 0.1
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_tjg83"]
-switch_mode = 2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_uj8sp"]
-xfade_time = 0.1
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_81c0l"]
-xfade_time = 0.1
-switch_mode = 2
-advance_mode = 2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_nmwpp"]
-xfade_time = 0.1
-switch_mode = 2
-advance_mode = 2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_lwqfp"]
-xfade_time = 0.1
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_8ej14"]
-xfade_time = 0.1
-advance_mode = 2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_xsgqq"]
-xfade_time = 0.1
-advance_mode = 2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_nt0jp"]
-xfade_time = 0.1
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_yna57"]
-xfade_time = 0.1
-
-[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_7mgft"]
-states/End/position = Vector2(1116, 80)
-states/Fall/node = SubResource("AnimationNodeAnimation_htppr")
-states/Fall/position = Vector2(890.14, 61.6423)
-states/Idle/node = SubResource("AnimationNodeAnimation_2gts2")
-states/Idle/position = Vector2(374, 106)
-states/Jump/node = SubResource("AnimationNodeAnimation_hd80k")
-states/Jump/position = Vector2(724.64, -44.3577)
-states/JumpLand/node = SubResource("AnimationNodeAnimation_4jwe7")
-states/JumpLand/position = Vector2(880.64, 234.642)
-states/Running/node = SubResource("AnimationNodeAnimation_kjxjf")
-states/Running/position = Vector2(593.562, 140)
-states/Start/position = Vector2(-15, 102)
-states/StrafeLeft/node = SubResource("AnimationNodeAnimation_yqswy")
-states/StrafeLeft/position = Vector2(491.562, 286)
-states/StrafeRight/node = SubResource("AnimationNodeAnimation_6ciuc")
-states/StrafeRight/position = Vector2(456.562, -80)
-transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_c4byh"), "Idle", "Running", SubResource("AnimationNodeStateMachineTransition_org7k"), "Running", "Idle", SubResource("AnimationNodeStateMachineTransition_rmqn5"), "Running", "StrafeLeft", SubResource("AnimationNodeStateMachineTransition_f4amm"), "StrafeLeft", "Running", SubResource("AnimationNodeStateMachineTransition_8f1bn"), "StrafeRight", "Running", SubResource("AnimationNodeStateMachineTransition_iaf1r"), "Running", "StrafeRight", SubResource("AnimationNodeStateMachineTransition_myinq"), "Idle", "StrafeLeft", SubResource("AnimationNodeStateMachineTransition_x6n6d"), "Idle", "StrafeRight", SubResource("AnimationNodeStateMachineTransition_c42ld"), "StrafeLeft", "Idle", SubResource("AnimationNodeStateMachineTransition_ura5f"), "StrafeRight", "Idle", SubResource("AnimationNodeStateMachineTransition_kj54a"), "Idle", "Jump", SubResource("AnimationNodeStateMachineTransition_wolt6"), "Jump", "Fall", SubResource("AnimationNodeStateMachineTransition_tjg83"), "Fall", "JumpLand", SubResource("AnimationNodeStateMachineTransition_uj8sp"), "JumpLand", "Idle", SubResource("AnimationNodeStateMachineTransition_81c0l"), "JumpLand", "Running", SubResource("AnimationNodeStateMachineTransition_nmwpp"), "Idle", "Fall", SubResource("AnimationNodeStateMachineTransition_lwqfp"), "JumpLand", "StrafeLeft", SubResource("AnimationNodeStateMachineTransition_8ej14"), "JumpLand", "StrafeRight", SubResource("AnimationNodeStateMachineTransition_xsgqq"), "Running", "Jump", SubResource("AnimationNodeStateMachineTransition_nt0jp"), "StrafeRight", "Jump", SubResource("AnimationNodeStateMachineTransition_yna57")]
-graph_offset = Vector2(161.04, -43.9404)
 
 [node name="Barbarian" type="CharacterBody3D"]
 script = ExtResource("1_7voax")
@@ -164,13 +31,14 @@ libraries = {
 "animations": ExtResource("2_fnk1o")
 }
 
-[node name="CharacterStateMachine" type="Node" parent="." node_paths=PackedStringArray("animation_tree", "movement_controller", "starting_state")]
+[node name="MovementStateMachine" type="Node" parent="." node_paths=PackedStringArray("animation_tree", "movement_controller", "starting_state")]
 script = ExtResource("3_e4jur")
 animation_tree = NodePath("../AnimationTree")
-movement_controller = NodePath("../MovementController")
+movement_controller = NodePath("../InputController")
+playback_parameter_path = "parameters/MovementStateMachine/playback"
 starting_state = NodePath("Idle")
 
-[node name="Idle" type="Node" parent="CharacterStateMachine" node_paths=PackedStringArray("running", "strafe_right", "strafe_left", "fall", "jump")]
+[node name="Idle" type="Node" parent="MovementStateMachine" node_paths=PackedStringArray("running", "strafe_right", "strafe_left", "fall", "jump")]
 script = ExtResource("3_gaqxg")
 running = NodePath("../Running")
 strafe_right = NodePath("../StrafeRight")
@@ -179,7 +47,7 @@ fall = NodePath("../Fall")
 jump = NodePath("../Jump")
 animation_tree_node = "Idle"
 
-[node name="Running" type="Node" parent="CharacterStateMachine" node_paths=PackedStringArray("idle", "strafe_left", "strafe_right", "jump")]
+[node name="Running" type="Node" parent="MovementStateMachine" node_paths=PackedStringArray("idle", "strafe_left", "strafe_right", "jump")]
 script = ExtResource("4_70x0g")
 idle = NodePath("../Idle")
 strafe_left = NodePath("../StrafeLeft")
@@ -187,7 +55,7 @@ strafe_right = NodePath("../StrafeRight")
 jump = NodePath("../Jump")
 animation_tree_node = "Running"
 
-[node name="StrafeLeft" type="Node" parent="CharacterStateMachine" node_paths=PackedStringArray("idle", "running", "strafe_right", "jump")]
+[node name="StrafeLeft" type="Node" parent="MovementStateMachine" node_paths=PackedStringArray("idle", "running", "strafe_right", "jump")]
 script = ExtResource("5_vfma0")
 idle = NodePath("../Idle")
 running = NodePath("../Running")
@@ -195,7 +63,7 @@ strafe_right = NodePath("../StrafeRight")
 jump = NodePath("../Jump")
 animation_tree_node = "StrafeLeft"
 
-[node name="StrafeRight" type="Node" parent="CharacterStateMachine" node_paths=PackedStringArray("idle", "running", "strafe_left", "jump")]
+[node name="StrafeRight" type="Node" parent="MovementStateMachine" node_paths=PackedStringArray("idle", "running", "strafe_left", "jump")]
 script = ExtResource("6_s6tjo")
 idle = NodePath("../Idle")
 running = NodePath("../Running")
@@ -203,20 +71,25 @@ strafe_left = NodePath("../StrafeLeft")
 jump = NodePath("../Jump")
 animation_tree_node = "StrafeRight"
 
-[node name="Jump" type="Node" parent="CharacterStateMachine" node_paths=PackedStringArray("fall_state")]
+[node name="Jump" type="Node" parent="MovementStateMachine" node_paths=PackedStringArray("fall_state")]
 script = ExtResource("9_2o6iq")
 fall_state = NodePath("../Fall")
 animation_tree_node = "Jump"
 
-[node name="Fall" type="Node" parent="CharacterStateMachine" node_paths=PackedStringArray("idle", "running")]
+[node name="Fall" type="Node" parent="MovementStateMachine" node_paths=PackedStringArray("idle", "running")]
 script = ExtResource("10_cc3yi")
 idle = NodePath("../Idle")
 running = NodePath("../Running")
 animation_tree_node = "Fall"
 
-[node name="MovementController" type="Node" parent="."]
+[node name="InputController" type="Node" parent="."]
 script = ExtResource("5_q0j0i")
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
-tree_root = SubResource("AnimationNodeStateMachine_7mgft")
+tree_root = ExtResource("12_6myd7")
 anim_player = NodePath("../AnimationPlayer")
+parameters/AttackOneShot/active = false
+parameters/AttackOneShot/internal_active = false
+parameters/AttackOneShot/request = 0
+parameters/Blend2/blend_amount = 0.0
+script = ExtResource("13_41f07")

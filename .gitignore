@@ -15,6 +15,7 @@ data_*/
 mono_crash.*.json
 
 test.tscn
+test2.tscn
 Models
 Assets
 *.tmp

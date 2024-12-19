@@ -19,7 +19,7 @@ func _ready():
 			c.reparent(scene)
 	add_child(scene)
 	scene.stats = stats
-	state_machine = scene.get_node("CharacterStateMachine")
+	state_machine = scene.get_node("MovementStateMachine")
 	state_machine.init(scene)
 
 

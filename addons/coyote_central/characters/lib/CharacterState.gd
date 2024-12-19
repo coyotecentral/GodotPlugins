@@ -3,12 +3,6 @@ extends State
 class_name CharacterState
 
 var movement_controller: MovementController
-var animation_tree: AnimationTree :
-	set(v):
-		animation_tree = v
-		# _anim_hint_str = AnimationPlayerHelpers.get_anim_list_hint_str(v)
-	get:
-		return animation_tree
 
 var _anim_state_machine: AnimationNodeStateMachinePlayback
 @export var animation_tree_node: String
@@ -17,12 +11,10 @@ func _ready() -> void:
 	if not get_parent() is CharacterStateMachine:
 		printerr("Class CharacterState expects parent node to be type CharacterStateMachine!")
 	var parent: CharacterStateMachine = get_parent()
-	animation_tree = parent.animation_tree
 	movement_controller = parent.movement_controller
 
 func init():
-	if animation_tree:
-		_anim_state_machine = animation_tree.get("parameters/playback")
+	pass
 
 # Old cod that provides tooling for animation players. Maybe use in 2D plugin.
 # var _animation_name: String = ""

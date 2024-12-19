@@ -6,10 +6,11 @@ var default_angle_deg: float = -20
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	pass
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	var child = get_child(0)
-	child.position.z = spring_length
+	if Engine.is_editor_hint():
+		for c in get_children():
+			c.position.z = spring_length

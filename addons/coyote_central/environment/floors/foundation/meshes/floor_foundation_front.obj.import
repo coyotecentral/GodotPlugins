@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://dmgo67cngigvp"
+path="res://.godot/imported/floor_foundation_front.obj-3e1ab6af805f63ecf384ad0230e66509.mesh"
+
+[deps]
+
+files=["res://.godot/imported/floor_foundation_front.obj-3e1ab6af805f63ecf384ad0230e66509.mesh"]
+
+source_file="res://addons/coyote_central/environment/floors/foundation/meshes/floor_foundation_front.obj"
+dest_files=["res://.godot/imported/floor_foundation_front.obj-3e1ab6af805f63ecf384ad0230e66509.mesh", "res://.godot/imported/floor_foundation_front.obj-3e1ab6af805f63ecf384ad0230e66509.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

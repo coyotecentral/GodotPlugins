@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://c5n4854jq46m3"
+path="res://.godot/imported/floor_tile_big_grate_open.obj-751762b2dd8409f7e7193dde56653faa.mesh"
+
+[deps]
+
+files=["res://.godot/imported/floor_tile_big_grate_open.obj-751762b2dd8409f7e7193dde56653faa.mesh"]
+
+source_file="res://addons/coyote_central/environment/floors/tile/floor_tile_big_grate_open.obj"
+dest_files=["res://.godot/imported/floor_tile_big_grate_open.obj-751762b2dd8409f7e7193dde56653faa.mesh", "res://.godot/imported/floor_tile_big_grate_open.obj-751762b2dd8409f7e7193dde56653faa.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://csbv8fnbny1xy"
+path="res://.godot/imported/floor_dirt_small_C.obj-44be4033d018a2930f3e3cc123d9df75.mesh"
+
+[deps]
+
+files=["res://.godot/imported/floor_dirt_small_C.obj-44be4033d018a2930f3e3cc123d9df75.mesh"]
+
+source_file="res://addons/coyote_central/environment/floors/dirt/small/meshes/floor_dirt_small_C.obj"
+dest_files=["res://.godot/imported/floor_dirt_small_C.obj-44be4033d018a2930f3e3cc123d9df75.mesh", "res://.godot/imported/floor_dirt_small_C.obj-44be4033d018a2930f3e3cc123d9df75.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://jcoh4d58dd5g"
+path="res://.godot/imported/floor_tile_large.obj-c93e7fff2880ef41faf66f2fc59815d3.mesh"
+
+[deps]
+
+files=["res://.godot/imported/floor_tile_large.obj-c93e7fff2880ef41faf66f2fc59815d3.mesh"]
+
+source_file="res://addons/coyote_central/environment/floors/tile/floor_tile_large.obj"
+dest_files=["res://.godot/imported/floor_tile_large.obj-c93e7fff2880ef41faf66f2fc59815d3.mesh", "res://.godot/imported/floor_tile_large.obj-c93e7fff2880ef41faf66f2fc59815d3.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

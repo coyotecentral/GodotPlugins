@@ -1,0 +1,43 @@
+[gd_resource type="AnimationNodeBlendTree" load_steps=8 format=3 uid="uid://b8shgd1jpp7mh"]
+
+[ext_resource type="AnimationNodeStateMachine" uid="uid://c5harjqyju4aa" path="res://addons/coyote_central/characters/common/resources/movement_animation_state_machine.tres" id="1_pxll6"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_vufrk"]
+animation = &"animations/1H_Melee_Attack_Slice_Diagonal"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_lla5f"]
+filter_enabled = true
+filters = ["", "Rig/Skeleton3D:elbowIK.l", "Rig/Skeleton3D:elbowIK.r", "Rig/Skeleton3D:hand.l", "Rig/Skeleton3D:hand.r", "Rig/Skeleton3D:handIK.l", "Rig/Skeleton3D:handIK.r", "Rig/Skeleton3D:handslot.l", "Rig/Skeleton3D:handslot.r", "Rig/Skeleton3D:lowerarm.l", "Rig/Skeleton3D:lowerarm.r", "Rig/Skeleton3D:upperarm.l", "Rig/Skeleton3D:upperarm.r"]
+fadein_time = 0.1
+fadeout_time = 0.5
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_i6suu"]
+animation = &"animations/1H_Melee_Attack_Slice_Diagonal"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_6pnpe"]
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_qwxe8"]
+allow_transition_to_self = true
+states/MeleeAttackChop/node = SubResource("AnimationNodeAnimation_i6suu")
+states/MeleeAttackChop/position = Vector2(568, 74)
+states/Start/position = Vector2(213, 99)
+transitions = ["Start", "MeleeAttackChop", SubResource("AnimationNodeStateMachineTransition_6pnpe")]
+graph_offset = Vector2(98.6997, 9.91503)
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_8ycmm"]
+filters = ["", "Rig/Skeleton3D:chest", "Rig/Skeleton3D:elbowIK.l", "Rig/Skeleton3D:elbowIK.r", "Rig/Skeleton3D:hand.l", "Rig/Skeleton3D:hand.r", "Rig/Skeleton3D:handIK.l", "Rig/Skeleton3D:handIK.r", "Rig/Skeleton3D:handslot.l", "Rig/Skeleton3D:handslot.r", "Rig/Skeleton3D:head", "Rig/Skeleton3D:lowerarm.l", "Rig/Skeleton3D:lowerarm.r", "Rig/Skeleton3D:root", "Rig/Skeleton3D:spine", "Rig/Skeleton3D:upperarm.l", "Rig/Skeleton3D:upperarm.r"]
+
+[resource]
+graph_offset = Vector2(-523.581, 1.26928)
+nodes/AttackAnimation/node = SubResource("AnimationNodeAnimation_vufrk")
+nodes/AttackAnimation/position = Vector2(-470, 310)
+nodes/AttackOneShot/node = SubResource("AnimationNodeOneShot_lla5f")
+nodes/AttackOneShot/position = Vector2(-20, 230)
+nodes/AttackStateMachine/node = SubResource("AnimationNodeStateMachine_qwxe8")
+nodes/AttackStateMachine/position = Vector2(-770, 180)
+nodes/Blend2/node = SubResource("AnimationNodeBlend2_8ycmm")
+nodes/Blend2/position = Vector2(-750, 60)
+nodes/MovementStateMachine/node = ExtResource("1_pxll6")
+nodes/MovementStateMachine/position = Vector2(-400, 60)
+nodes/output/position = Vector2(350, 90)
+node_connections = [&"AttackOneShot", 0, &"MovementStateMachine", &"AttackOneShot", 1, &"AttackAnimation", &"output", 0, &"AttackOneShot"]

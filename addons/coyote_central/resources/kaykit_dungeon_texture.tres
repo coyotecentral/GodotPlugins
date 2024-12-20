@@ -1,0 +1,6 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://b2noqrh0xqu44"]
+
+[ext_resource type="Texture2D" uid="uid://k0sxf6tph7p6" path="res://Assets/KayKit/textures/dungeon_texture.png" id="1_twwyv"]
+
+[resource]
+albedo_texture = ExtResource("1_twwyv")

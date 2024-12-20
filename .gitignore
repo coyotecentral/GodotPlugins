@@ -13,3 +13,12 @@ export_presets.cfg
 .mono/
 data_*/
 mono_crash.*.json
+
+test.tscn
+test2.tscn
+Models
+Assets
+*.tmp
+.DS_Store
+
+barbarian_2.tscn

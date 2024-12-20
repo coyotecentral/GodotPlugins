@@ -22,7 +22,7 @@ window/size/viewport_height=1080
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/coyote_central/plugin.cfg")
+enabled=PackedStringArray("res://addons/coyote_central/plugin.cfg", "res://addons/dnguyen_tools/plugin.cfg", "res://addons/godot-plugin-refresher/plugin.cfg")
 
 [input]
 

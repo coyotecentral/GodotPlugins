@@ -14,7 +14,6 @@ var selected_file: String = ""
 var mesh: MeshInstance3D
 var delta: float = 0.0
 
-
 func _ready():
 	btn.pressed.connect(_on_button_pressed)
 	sub_viewport.get_parent().gui_input.connect(_handle_sub_vp_gui_input)
@@ -29,6 +28,7 @@ func _handle_sub_vp_gui_input(event: InputEvent) -> void:
 	if not mesh:
 		return
 	if event is InputEventMouseMotion:
+		# Rotate the mesh
 		if event.button_mask == MOUSE_BUTTON_MASK_LEFT:
 			mesh.global_basis = mesh.global_basis.rotated(Vector3.UP, event.relative.x * delta)
 			mesh.global_basis = mesh.global_basis.rotated(Vector3.LEFT, event.relative.y * delta)
@@ -45,10 +45,12 @@ func _process(d: float) -> void:
 			_clear_sub_viewport()
 			_render_to_sub_viewport(path)
 
-# Add to export
+# TODO: Add to export when clicked
 func _on_button_pressed():
 	pass
 
+
+# Renders the selected mesh to the viewport
 func _render_to_sub_viewport(file: String):
 	var array_mesh: ArrayMesh = load(file)
 	mesh = MeshInstance3D.new()
@@ -57,11 +59,16 @@ func _render_to_sub_viewport(file: String):
 	sub_viewport.get_camera_3d().look_at(mesh.get_aabb().get_center())
 
 
+# Clears the current sub viewport
 func _clear_sub_viewport():
 	if mesh:
 		mesh.queue_free()
 	mesh = null
 
+# Parses the selected object files to a dictionary
+#
+# TODO: this will cause conflicts if there is a duplicate file name
+# to fix try setting the values  an array instead of single string
 func _parse_obj_files_to_dict() -> Dictionary:
 	var tree_repr: Dictionary = {}
 	for key in obj_files.keys():
@@ -87,6 +94,7 @@ func _render_ui():
 	root.set_text(0, "res://")
 	_render_dict(d, root)
 
+# Renders the dictionary to our Tree control node
 func _render_dict(dict: Dictionary, item: TreeItem, level: int = 0) -> void:
 	if level >= MAX_RECURSION:
 		printerr("Maximum recursion reached while rendering UI!!")
@@ -95,13 +103,16 @@ func _render_dict(dict: Dictionary, item: TreeItem, level: int = 0) -> void:
 		if dict[key] is Dictionary:
 			var c = tree.create_item(item)
 			c.set_text(0, key)
+			c.set_icon(0, EditorInterface.get_editor_theme().get_icon("Folder", "EditorIcons"))
 			_render_dict(dict[key], c, level + 1)
 		if dict[key] is Array:
 			for v in dict[key]:
 				var c = tree.create_item(item)
 				c.set_text(0, v)
+				c.set_icon(0, EditorInterface.get_editor_theme().get_icon("Mesh", "EditorIcons"))
 
 
+# Scans the filesystem and filters out files for *.obj
 func _scan_filesystem(dir: EditorFileSystemDirectory, level: int = 0):
 	if level >= MAX_RECURSION:
 		printerr("Maximum recursion reached!!")

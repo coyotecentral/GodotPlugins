@@ -1,26 +1,125 @@
-[gd_scene load_steps=2 format=3 uid="uid://dqgec0s25vbyf"]
+[gd_scene load_steps=4 format=3 uid="uid://dqgec0s25vbyf"]
 
 [ext_resource type="Script" path="res://addons/dnguyen_tools/main.gd" id="1_hrunr"]
+[ext_resource type="Script" path="res://addons/dnguyen_tools/ui/main/GenerationConfigController.gd" id="2_jyku7"]
 
-[node name="Control" type="CenterContainer" node_paths=PackedStringArray("btn", "tree")]
+[sub_resource type="World3D" id="World3D_385uj"]
+
+[node name="Control" type="Control" node_paths=PackedStringArray("btn", "tree", "sub_viewport")]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource("1_hrunr")
-btn = NodePath("VBoxContainer/Button")
-tree = NodePath("VBoxContainer/Tree")
+btn = NodePath("MarginContainer/HBoxContainer/FileExplorer/Button")
+tree = NodePath("MarginContainer/HBoxContainer/FileExplorer/Tree")
+sub_viewport = NodePath("MarginContainer/HBoxContainer/ExportOptions/SubViewportContainer/SubViewport")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 288.0
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="FileExplorer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(256, 256)
 layout_mode = 2
 
-[node name="Tree" type="Tree" parent="VBoxContainer"]
+[node name="Search(TODO)" type="LineEdit" parent="MarginContainer/HBoxContainer/FileExplorer"]
+visible = false
+layout_mode = 2
+placeholder_text = "Search"
+
+[node name="Tree" type="Tree" parent="MarginContainer/HBoxContainer/FileExplorer"]
 layout_mode = 2
 size_flags_vertical = 3
 select_mode = 2
 
-[node name="Button" type="Button" parent="VBoxContainer"]
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/FileExplorer"]
 layout_mode = 2
 text = "Add"
+
+[node name="ExportOptions" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="MarginContainer/HBoxContainer/ExportOptions"]
+custom_minimum_size = Vector2(256, 256)
+layout_mode = 2
+
+[node name="SubViewport" type="SubViewport" parent="MarginContainer/HBoxContainer/ExportOptions/SubViewportContainer"]
+world_3d = SubResource("World3D_385uj")
+handle_input_locally = false
+size = Vector2i(256, 256)
+render_target_update_mode = 4
+
+[node name="CameraContainer" type="Node3D" parent="MarginContainer/HBoxContainer/ExportOptions/SubViewportContainer/SubViewport"]
+
+[node name="Camera3D" type="Camera3D" parent="MarginContainer/HBoxContainer/ExportOptions/SubViewportContainer/SubViewport/CameraContainer"]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 1, 5)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="MarginContainer/HBoxContainer/ExportOptions/SubViewportContainer/SubViewport/CameraContainer/Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0.328169, -5.08845)
+light_energy = 0.5
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/ExportOptions"]
+custom_minimum_size = Vector2(256, 256)
+layout_mode = 2
+script = ExtResource("2_jyku7")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/ExportOptions/MarginContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="Opts" type="VBoxContainer" parent="MarginContainer/HBoxContainer/ExportOptions/MarginContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/ExportOptions/MarginContainer/MarginContainer/Opts"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Generation"
+
+[node name="Physics" type="VBoxContainer" parent="MarginContainer/HBoxContainer/ExportOptions/MarginContainer/MarginContainer/Opts"]
+layout_mode = 2
+theme_override_constants/separation = -2
+
+[node name="cb_StaticBody3D" type="CheckBox" parent="MarginContainer/HBoxContainer/ExportOptions/MarginContainer/MarginContainer/Opts/Physics"]
+layout_mode = 2
+text = "StaticBody3D"
+
+[node name="cb_RigidBody3D" type="CheckBox" parent="MarginContainer/HBoxContainer/ExportOptions/MarginContainer/MarginContainer/Opts/Physics"]
+layout_mode = 2
+text = "RigidBody3D"
+
+[node name="cb_Area3D" type="CheckBox" parent="MarginContainer/HBoxContainer/ExportOptions/MarginContainer/MarginContainer/Opts/Physics"]
+layout_mode = 2
+text = "Area3D"
+
+[node name="CheckBox" type="CheckBox" parent="MarginContainer/HBoxContainer/ExportOptions/MarginContainer/MarginContainer/Opts/Physics"]
+layout_mode = 2
+text = "CollisionShape3D"
+
+[node name="Label2" type="Label" parent="MarginContainer/HBoxContainer/ExportOptions/MarginContainer/MarginContainer/Opts"]
+layout_mode = 2
+size_flags_vertical = 6
+text = "Note: Physics bodies and areas generate their own CollisionShape3D"
+autowrap_mode = 2
+
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/ExportOptions/MarginContainer"]
+show_behind_parent = true
+layout_mode = 2
+mouse_filter = 2

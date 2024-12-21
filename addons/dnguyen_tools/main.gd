@@ -8,7 +8,6 @@ const MAX_RECURSION: int = 100
 @onready var fs = EditorInterface.get_resource_filesystem().get_filesystem()
 
 var obj_files: Dictionary = {}
-var tree_root: TreeItem
 
 
 func _ready():
@@ -18,7 +17,7 @@ func _ready():
 func _on_button_pressed():
 	_reset_tree()
 	_scan_filesystem(fs)
-	_parse_obj_files_to_dict()
+	_render_ui()
 
 func _parse_obj_files_to_dict() -> Dictionary:
 	var tree_repr: Dictionary = {}
@@ -38,6 +37,27 @@ func _parse_obj_files_to_dict() -> Dictionary:
 			node[segments[-1]] = [key]
 	return tree_repr
 
+func _render_ui():
+	_reset_tree()
+	var d = _parse_obj_files_to_dict()
+	var root = tree.create_item()
+	root.set_text(0, "res://")
+	_render_dict(d, root)
+
+func _render_dict(dict: Dictionary, item: TreeItem, level: int = 0) -> void:
+	if level >= MAX_RECURSION:
+		printerr("Maximum recursion reached while rendering UI!!")
+		return
+	for key in dict.keys():
+		if dict[key] is Dictionary:
+			var c = tree.create_item(item)
+			c.set_text(0, key)
+			_render_dict(dict[key], c, level + 1)
+		if dict[key] is Array:
+			for v in dict[key]:
+				var c = tree.create_item(item)
+				c.set_text(0, v)
+
 
 func _scan_filesystem(dir: EditorFileSystemDirectory, level: int = 0):
 	if level >= MAX_RECURSION:
@@ -54,5 +74,3 @@ func _scan_filesystem(dir: EditorFileSystemDirectory, level: int = 0):
 
 func _reset_tree():
 	tree.clear()
-	tree_root = tree.create_item()
-	tree_root.set_text(0, "res://")

@@ -1,8 +1,13 @@
 @tool
 extends Control
 
-@export var btn: Button
+@export var btn_add: Button
 @export var tree: Tree
+var tree_root: TreeItem
+
+@export var generation_controller: Control
+
+@export_group("Mesh Previewer")
 @export var sub_viewport: SubViewport
 const MAX_RECURSION: int = 100
 
@@ -15,7 +20,7 @@ var mesh: MeshInstance3D
 var delta: float = 0.0
 
 func _ready():
-	btn.pressed.connect(_on_button_pressed)
+	btn_add.pressed.connect(_on_add_button_pressed)
 	sub_viewport.get_parent().gui_input.connect(_handle_sub_vp_gui_input)
 
 	_reset_tree()
@@ -46,12 +51,31 @@ func _process(d: float) -> void:
 			_render_to_sub_viewport(path)
 
 # TODO: Add to export when clicked
-func _on_button_pressed():
-	pass
+func _on_add_button_pressed():
+	var selected_paths: PackedStringArray = []
+
+	var traverse = func(item: TreeItem, recurse: Callable):
+		if not item:
+			return
+		
+		if item.is_selected(0):
+			# Concat the URI components to a single string with
+			# a trailing "/"
+			var m: String = ""
+			for s in item.get_metadata(0):
+				m = m + s + "/"
+			selected_paths.append("%s%s" % [m, item.get_text(0)])
+
+		for c in item.get_children():
+			recurse.call(c, recurse)
+	
+	traverse.call(tree.get_root(), traverse)
+	generation_controller.add_selection(selected_paths)
 
 
+# TODO: fix jank
 # Renders the selected mesh to the viewport
-func _render_to_sub_viewport(file: String):
+func _render_to_sub_viewport(file: String) -> void:
 	var array_mesh: ArrayMesh = load(file)
 	mesh = MeshInstance3D.new()
 	mesh.mesh = array_mesh
@@ -90,12 +114,12 @@ func _parse_obj_files_to_dict() -> Dictionary:
 func _render_ui():
 	_reset_tree()
 	var d = _parse_obj_files_to_dict()
-	var root = tree.create_item()
-	root.set_text(0, "res://")
-	_render_dict(d, root)
+	tree_root = tree.create_item()
+	tree_root.set_text(0, "res://")
+	_render_dict(d, tree_root)
 
 # Renders the dictionary to our Tree control node
-func _render_dict(dict: Dictionary, item: TreeItem, level: int = 0) -> void:
+func _render_dict(dict: Dictionary, item: TreeItem, url_segments: PackedStringArray = [], level: int = 0) -> void:
 	if level >= MAX_RECURSION:
 		printerr("Maximum recursion reached while rendering UI!!")
 		return
@@ -104,14 +128,19 @@ func _render_dict(dict: Dictionary, item: TreeItem, level: int = 0) -> void:
 			var c = tree.create_item(item)
 			c.set_text(0, key)
 			c.set_icon(0, EditorInterface.get_editor_theme().get_icon("Folder", "EditorIcons"))
-			_render_dict(dict[key], c, level + 1)
+			c.set_selectable(0, false)
+			var new_url_segments := url_segments.duplicate()
+			new_url_segments.append(key)
+			_render_dict(dict[key], c, new_url_segments, level + 1)
 		if dict[key] is Array:
 			for v in dict[key]:
 				var c = tree.create_item(item)
 				c.set_text(0, v)
 				c.set_icon(0, EditorInterface.get_editor_theme().get_icon("Mesh", "EditorIcons"))
+				c.set_metadata(0, url_segments)
 
 
+# Entrypoint for the file scan logic
 # Scans the filesystem and filters out files for *.obj
 func _scan_filesystem(dir: EditorFileSystemDirectory, level: int = 0):
 	if level >= MAX_RECURSION:
@@ -123,6 +152,11 @@ func _scan_filesystem(dir: EditorFileSystemDirectory, level: int = 0):
 		_scan_filesystem(subdir, level + 1)
 	for f in dir.get_file_count():
 		if dir.get_file(f).match("*.obj"):
+
+			# TODO: this will result in a bug where files with the same file name will only appear once
+			# We don't actually need this intermediate representation since we can just store
+			# the path as metadata for each item.
+
 			# Paths starting with res:// is a given, so remove them. Also strip the last "/" at the end.
 			obj_files[dir.get_file(f)] = dir.get_path().split("res://")[1].left(-1)
 

@@ -5,7 +5,7 @@
 
 [sub_resource type="World3D" id="World3D_385uj"]
 
-[node name="Control" type="Control" node_paths=PackedStringArray("btn", "tree", "sub_viewport")]
+[node name="Control" type="Control" node_paths=PackedStringArray("btn_add", "tree", "generation_controller", "sub_viewport")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -15,15 +15,17 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_hrunr")
-btn = NodePath("MarginContainer/HBoxContainer/FileExplorer/Button")
+btn_add = NodePath("MarginContainer/HBoxContainer/FileExplorer/Btn_Add")
 tree = NodePath("MarginContainer/HBoxContainer/FileExplorer/Tree")
-sub_viewport = NodePath("MarginContainer/HBoxContainer/ExportOptions/SubViewportContainer/SubViewport")
+generation_controller = NodePath("MarginContainer/HBoxContainer/ExportOpts")
+sub_viewport = NodePath("MarginContainer/HBoxContainer/MeshPreviewer/SubViewportContainer/SubViewport")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
-anchors_preset = 9
+anchors_preset = 15
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 288.0
+grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 16
@@ -34,7 +36,7 @@ theme_override_constants/margin_bottom = 16
 layout_mode = 2
 
 [node name="FileExplorer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(256, 256)
+custom_minimum_size = Vector2(512, 0)
 layout_mode = 2
 
 [node name="Search(TODO)" type="LineEdit" parent="MarginContainer/HBoxContainer/FileExplorer"]
@@ -47,79 +49,81 @@ layout_mode = 2
 size_flags_vertical = 3
 select_mode = 2
 
-[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/FileExplorer"]
+[node name="Btn_Add" type="Button" parent="MarginContainer/HBoxContainer/FileExplorer"]
 layout_mode = 2
 text = "Add"
 
-[node name="ExportOptions" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+[node name="ExportOpts" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(0, 512)
 layout_mode = 2
-
-[node name="SubViewportContainer" type="SubViewportContainer" parent="MarginContainer/HBoxContainer/ExportOptions"]
-custom_minimum_size = Vector2(256, 256)
-layout_mode = 2
-
-[node name="SubViewport" type="SubViewport" parent="MarginContainer/HBoxContainer/ExportOptions/SubViewportContainer"]
-world_3d = SubResource("World3D_385uj")
-handle_input_locally = false
-size = Vector2i(256, 256)
-render_target_update_mode = 4
-
-[node name="CameraContainer" type="Node3D" parent="MarginContainer/HBoxContainer/ExportOptions/SubViewportContainer/SubViewport"]
-
-[node name="Camera3D" type="Camera3D" parent="MarginContainer/HBoxContainer/ExportOptions/SubViewportContainer/SubViewport/CameraContainer"]
-transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 1, 5)
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="MarginContainer/HBoxContainer/ExportOptions/SubViewportContainer/SubViewport/CameraContainer/Camera3D"]
-transform = Transform3D(1, 0, 0, 0, 0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0.328169, -5.08845)
-light_energy = 0.5
-
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/ExportOptions"]
-custom_minimum_size = Vector2(256, 256)
-layout_mode = 2
+size_flags_horizontal = 3
 script = ExtResource("2_jyku7")
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/ExportOptions/MarginContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
-
-[node name="Opts" type="VBoxContainer" parent="MarginContainer/HBoxContainer/ExportOptions/MarginContainer/MarginContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/ExportOptions/MarginContainer/MarginContainer/Opts"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 18
-text = "Generation"
-
-[node name="Physics" type="VBoxContainer" parent="MarginContainer/HBoxContainer/ExportOptions/MarginContainer/MarginContainer/Opts"]
-layout_mode = 2
-theme_override_constants/separation = -2
-
-[node name="cb_StaticBody3D" type="CheckBox" parent="MarginContainer/HBoxContainer/ExportOptions/MarginContainer/MarginContainer/Opts/Physics"]
-layout_mode = 2
-text = "StaticBody3D"
-
-[node name="cb_RigidBody3D" type="CheckBox" parent="MarginContainer/HBoxContainer/ExportOptions/MarginContainer/MarginContainer/Opts/Physics"]
-layout_mode = 2
-text = "RigidBody3D"
-
-[node name="cb_Area3D" type="CheckBox" parent="MarginContainer/HBoxContainer/ExportOptions/MarginContainer/MarginContainer/Opts/Physics"]
-layout_mode = 2
-text = "Area3D"
-
-[node name="CheckBox" type="CheckBox" parent="MarginContainer/HBoxContainer/ExportOptions/MarginContainer/MarginContainer/Opts/Physics"]
-layout_mode = 2
-text = "CollisionShape3D"
-
-[node name="Label2" type="Label" parent="MarginContainer/HBoxContainer/ExportOptions/MarginContainer/MarginContainer/Opts"]
-layout_mode = 2
-size_flags_vertical = 6
-text = "Note: Physics bodies and areas generate their own CollisionShape3D"
-autowrap_mode = 2
-
-[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/ExportOptions/MarginContainer"]
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/ExportOpts"]
 show_behind_parent = true
 layout_mode = 2
-mouse_filter = 2
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/HBoxContainer/ExportOpts/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/ExportOpts/Panel/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Empty" type="CenterContainer" parent="MarginContainer/HBoxContainer/ExportOpts/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/ExportOpts/Panel/Empty"]
+self_modulate = Color(0, 0, 0, 0.333333)
+custom_minimum_size = Vector2(256, 128)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/ExportOpts/Panel/Empty/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "No items selected"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/ExportOpts"]
+layout_mode = 2
+text = "Generate"
+
+[node name="MeshPreviewer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="MarginContainer/HBoxContainer/MeshPreviewer"]
+custom_minimum_size = Vector2(256, 256)
+layout_mode = 2
+
+[node name="SubViewport" type="SubViewport" parent="MarginContainer/HBoxContainer/MeshPreviewer/SubViewportContainer"]
+world_3d = SubResource("World3D_385uj")
+handle_input_locally = false
+render_target_update_mode = 0
+
+[node name="CameraContainer" type="Node3D" parent="MarginContainer/HBoxContainer/MeshPreviewer/SubViewportContainer/SubViewport"]
+
+[node name="Camera3D" type="Camera3D" parent="MarginContainer/HBoxContainer/MeshPreviewer/SubViewportContainer/SubViewport/CameraContainer"]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 1, 5)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="MarginContainer/HBoxContainer/MeshPreviewer/SubViewportContainer/SubViewport/CameraContainer/Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0.328169, -5.08845)
+light_energy = 0.5

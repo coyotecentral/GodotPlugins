@@ -2,9 +2,7 @@
 extends Control
 
 @export var btn_add: Button
-@export var btn_scan: Button
-@export var tree: Tree
-var tree_root: TreeItem
+@export var file_explorer: Control
 
 @export var generation_controller: Control
 
@@ -12,29 +10,26 @@ const MAX_RECURSION: int = 100
 
 @onready var fs = EditorInterface.get_resource_filesystem().get_filesystem()
 
-var obj_files: Dictionary = {}
-var files_for_export: PackedStringArray = []
+var filtered_fs: Dictionary = {
+	"dirs": {},
+	"files": []
+}
+
+var export_opts: Dictionary = {
+	"files": PackedStringArray([]),
+	"output": {
+		"dir": ""
+	}
+}
 
 func _ready():
-	btn_add.pressed.connect(_on_add_button_pressed)
+	_recursively_scan_dir(fs)
+	$MarginContainer/HBoxContainer/FileExplorer.render(filtered_fs)
 
 	EditorInterface.get_resource_filesystem().filesystem_changed.connect(func():
-		_scan_filesystem(EditorInterface.get_resource_filesystem().get_filesystem())
-		_render_ui()
+		_recursively_scan_dir(fs)
 	)
-
-	_reset_tree()
-	btn_scan.pressed.connect(func():
-		_scan_filesystem(EditorInterface.get_resource_filesystem().get_filesystem())
-		_render_ui()
-	)
-	_scan_filesystem(fs)
-	_render_ui()
-
-
-func _process(d: float) -> void:
-	pass
-	
+	file_explorer.render(filtered_fs)
 
 func _on_add_button_pressed():
 	var selected_paths: PackedStringArray = []
@@ -54,26 +49,34 @@ func _on_add_button_pressed():
 		for c in item.get_children():
 			recurse.call(c, recurse)
 	
-	traverse.call(tree.get_root(), traverse)
+	#Z traverse.call(tree.get_root(), traverse)
 	# generation_controller.add_selection(selected_paths)
 	_add_selection(selected_paths)
 
 func _add_selection(array: PackedStringArray) -> void:
 	for i in array:
-		if not files_for_export.has(i):
-			files_for_export.append(i)
+		if not export_opts["files"].has(i):
+			export_opts["files"].append(i)
 	_render_files_for_export()
 
 func _remove_selection(path: String) -> void:
-	var idx = files_for_export.find(path)
-	if idx:
-		files_for_export.remove_at(idx)
+	var idx = export_opts["files"].find(path)
+	if idx >= 0:
+		export_opts["files"].remove_at(idx)
 	_render_files_for_export()
+
+func _clear_selection() -> void:
+	export_opts["files"] = PackedStringArray([])
+	_render_files_for_export()
+
+# Reset selection, state, etc
+func reset() -> void:
+	_clear_selection()
 
 func _render_files_for_export() -> void:
 	var ilist: Control = $MarginContainer/HBoxContainer/SelectedFiles/ScrollContainer/ItemList
 	var empty_panel: Control = $MarginContainer/HBoxContainer/SelectedFiles/Empty
-	if files_for_export.size() > 0:
+	if export_opts["files"].size() > 0:
 		empty_panel.visible = false
 	else:
 		empty_panel.visible = true
@@ -82,82 +85,42 @@ func _render_files_for_export() -> void:
 	for c in ilist.get_children():
 		c.queue_free()
 
-	for i in files_for_export:
-		var c = Label.new()
-		c.text = i
-		c.focus_mode = Control.FOCUS_ALL
+	for i in export_opts["files"]:
+		var c = load("res://addons/obj-import-util/ui/main/ExportItem.tscn").instantiate()
+		c.file_path= i
+		c.removed.connect(func():
+			_remove_selection(i)
+		)
 		ilist.add_child(c)
 
-# Parses the selected object files to a dictionary
-#
-# TODO: this will cause conflicts if there is a duplicate file name
-# to fix try setting the values  an array instead of single string
-func _parse_obj_files_to_dict() -> Dictionary:
-	var tree_repr: Dictionary = {}
-	for key in obj_files.keys():
-		var path = obj_files[key]
-		var segments: Array = path.split("/")
-
-		# Traverse the dictionary
-		var node = tree_repr
-		for s in segments:
-			if not node.has(s):
-				node[s] = {}
-			node = node[s]
-		if node.has(segments[-1]):
-			node[segments[-1]].push_back(key)
-		else:
-			node[segments[-1]] = [key]
-	return tree_repr
-
-func _render_ui():
-	_reset_tree()
-	var d = _parse_obj_files_to_dict()
-	tree_root = tree.create_item()
-	tree_root.set_text(0, "res://")
-	_render_dict(d, tree_root)
-
-# Renders the dictionary to our Tree control node
-func _render_dict(dict: Dictionary, item: TreeItem, url_segments: PackedStringArray = [], level: int = 0) -> void:
-	if level >= MAX_RECURSION:
-		printerr("Maximum recursion reached while rendering UI!!")
-		return
-	for key in dict.keys():
-		if dict[key] is Dictionary:
-			var c = tree.create_item(item)
-			c.set_text(0, key)
-			c.set_icon(0, EditorInterface.get_editor_theme().get_icon("Folder", "EditorIcons"))
-			c.set_selectable(0, false)
-			var new_url_segments := url_segments.duplicate()
-			new_url_segments.append(key)
-			_render_dict(dict[key], c, new_url_segments, level + 1)
-		if dict[key] is Array:
-			for v in dict[key]:
-				var c = tree.create_item(item)
-				c.set_text(0, v)
-				c.set_icon(0, EditorInterface.get_editor_theme().get_icon("Mesh", "EditorIcons"))
-				c.set_metadata(0, url_segments)
-
-
-# Entrypoint for the file scan logic
-# Scans the filesystem and filters out files for *.obj
-func _scan_filesystem(dir: EditorFileSystemDirectory, level: int = 0):
-	if level >= MAX_RECURSION:
-		printerr("Maximum recursion reached!!")
-		return
-
+func _recursively_scan_dir(dir: EditorFileSystemDirectory) -> void:
 	for d in dir.get_subdir_count():
 		var subdir = dir.get_subdir(d)
-		_scan_filesystem(subdir, level + 1)
+		_recursively_scan_dir(subdir)
 	for f in dir.get_file_count():
 		if dir.get_file(f).match("*.obj"):
+			var fpath = "%s%s" % [dir.get_path().split("res://")[1], dir.get_file(f)]
+			_parse_path(fpath)
 
-			# TODO: this will result in a bug where files with the same file name will only appear once
-			# We don't actually need this intermediate representation since we can just store
-			# the path as metadata for each item.
+func _parse_path(fpath: String) -> void:
+	var segments = fpath.split("/")
 
-			# Paths starting with res:// is a given, so remove them. Also strip the last "/" at the end.
-			obj_files[dir.get_file(f)] = dir.get_path().split("res://")[1].left(-1)
+	if segments.size() == 1 and segments[0].match("*.obj"):
+		filtered_fs["files"].append(segments[0])
+		print(segments)
+		return
 
-func _reset_tree():
-	tree.clear()
+	var dict = filtered_fs["dirs"]
+	for s in segments.size():
+		if not segments[s].match("*.obj"):
+			if not dict.has(segments[s]):
+				dict [segments[s]] = {
+					"files": [],
+					"dirs": {}
+				}
+			if s < segments.size() - 2:
+				dict = dict[segments[s]]["dirs"]
+			else:
+				dict = dict[segments[s]]
+		else:
+			dict["files"].append(segments[s])

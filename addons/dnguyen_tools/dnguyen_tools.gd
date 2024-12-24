@@ -1,28 +1,21 @@
 @tool
 extends EditorPlugin
 
-const MainPanel = preload("res://addons/dnguyen_tools/ui/main/main.tscn")
+const MainWindow = preload("res://addons/dnguyen_tools/ui/main/main_window.tscn")
 
-var i_main_panel: Control
+var i_main_window: Window
 
 func _enter_tree() -> void:
-	i_main_panel = MainPanel.instantiate()
-	EditorInterface.get_editor_main_screen().add_child(i_main_panel)
-	_make_visible(false)
+	add_tool_menu_item("Obj Import Util", func():
+		if not i_main_window:
+			i_main_window = MainWindow.instantiate()
+			EditorInterface.get_base_control().add_child(i_main_window)
+
+		i_main_window.close_requested.connect(i_main_window.hide)
+		i_main_window.show()
+	)
 
 func _exit_tree() -> void:
-	if i_main_panel:
-		i_main_panel.queue_free()
-
-func _has_main_screen() -> bool:
-	return true
-
-func _make_visible(visible: bool) -> void:
-	if i_main_panel:
-		i_main_panel.visible = visible
-
-func _get_plugin_name() -> String:
-	return "Tools"
-
-func _get_plugin_icon():
-	return EditorInterface.get_editor_theme().get_icon("Node", "EditorIcons")
+	if i_main_window:
+		i_main_window.queue_free()
+		remove_tool_menu_item("Obj Import Util")

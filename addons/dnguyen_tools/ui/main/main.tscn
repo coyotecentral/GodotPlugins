@@ -1,11 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://dqgec0s25vbyf"]
+[gd_scene load_steps=3 format=3 uid="uid://dqgec0s25vbyf"]
 
 [ext_resource type="Script" path="res://addons/dnguyen_tools/main.gd" id="1_hrunr"]
 [ext_resource type="Script" path="res://addons/dnguyen_tools/ui/main/GenerationConfigController.gd" id="2_jyku7"]
 
-[sub_resource type="World3D" id="World3D_385uj"]
-
-[node name="Control" type="Control" node_paths=PackedStringArray("btn_add", "tree", "generation_controller", "sub_viewport")]
+[node name="Control" type="Control" node_paths=PackedStringArray("btn_add", "btn_scan", "tree", "generation_controller", "sub_viewport")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -16,9 +14,10 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_hrunr")
 btn_add = NodePath("MarginContainer/HBoxContainer/FileExplorer/Btn_Add")
+btn_scan = NodePath("MarginContainer/HBoxContainer/FileExplorer/Btn_Scan")
 tree = NodePath("MarginContainer/HBoxContainer/FileExplorer/Tree")
 generation_controller = NodePath("MarginContainer/HBoxContainer/ExportOpts")
-sub_viewport = NodePath("MarginContainer/HBoxContainer/MeshPreviewer/SubViewportContainer/SubViewport")
+sub_viewport = NodePath("")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -38,6 +37,10 @@ layout_mode = 2
 [node name="FileExplorer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(512, 0)
 layout_mode = 2
+
+[node name="Btn_Scan" type="Button" parent="MarginContainer/HBoxContainer/FileExplorer"]
+layout_mode = 2
+text = "Scan Filesystem"
 
 [node name="Search(TODO)" type="LineEdit" parent="MarginContainer/HBoxContainer/FileExplorer"]
 visible = false
@@ -104,26 +107,3 @@ vertical_alignment = 1
 [node name="Button" type="Button" parent="MarginContainer/HBoxContainer/ExportOpts"]
 layout_mode = 2
 text = "Generate"
-
-[node name="MeshPreviewer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
-visible = false
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="SubViewportContainer" type="SubViewportContainer" parent="MarginContainer/HBoxContainer/MeshPreviewer"]
-custom_minimum_size = Vector2(256, 256)
-layout_mode = 2
-
-[node name="SubViewport" type="SubViewport" parent="MarginContainer/HBoxContainer/MeshPreviewer/SubViewportContainer"]
-world_3d = SubResource("World3D_385uj")
-handle_input_locally = false
-render_target_update_mode = 0
-
-[node name="CameraContainer" type="Node3D" parent="MarginContainer/HBoxContainer/MeshPreviewer/SubViewportContainer/SubViewport"]
-
-[node name="Camera3D" type="Camera3D" parent="MarginContainer/HBoxContainer/MeshPreviewer/SubViewportContainer/SubViewport/CameraContainer"]
-transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 1, 5)
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="MarginContainer/HBoxContainer/MeshPreviewer/SubViewportContainer/SubViewport/CameraContainer/Camera3D"]
-transform = Transform3D(1, 0, 0, 0, 0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0.328169, -5.08845)
-light_energy = 0.5

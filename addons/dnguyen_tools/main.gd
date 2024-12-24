@@ -2,13 +2,12 @@
 extends Control
 
 @export var btn_add: Button
+@export var btn_scan: Button
 @export var tree: Tree
 var tree_root: TreeItem
 
 @export var generation_controller: Control
 
-@export_group("Mesh Previewer")
-@export var sub_viewport: SubViewport
 const MAX_RECURSION: int = 100
 
 @onready var fs = EditorInterface.get_resource_filesystem().get_filesystem()
@@ -21,23 +20,20 @@ var delta: float = 0.0
 
 func _ready():
 	btn_add.pressed.connect(_on_add_button_pressed)
-	sub_viewport.get_parent().gui_input.connect(_handle_sub_vp_gui_input)
+
+	EditorInterface.get_resource_filesystem().filesystem_changed.connect(func():
+		_scan_filesystem(EditorInterface.get_resource_filesystem().get_filesystem())
+		_render_ui()
+	)
 
 	_reset_tree()
+	btn_scan.pressed.connect(func():
+		_scan_filesystem(EditorInterface.get_resource_filesystem().get_filesystem())
+		_render_ui()
+	)
 	_scan_filesystem(fs)
 	_render_ui()
 
-
-# TODO: Fix this jank
-func _handle_sub_vp_gui_input(event: InputEvent) -> void:
-	if not mesh:
-		return
-	if event is InputEventMouseMotion:
-		# Rotate the mesh
-		if event.button_mask == MOUSE_BUTTON_MASK_LEFT:
-			mesh.global_basis = mesh.global_basis.rotated(Vector3.UP, event.relative.x * delta)
-			mesh.global_basis = mesh.global_basis.rotated(Vector3.LEFT, event.relative.y * delta)
-			sub_viewport.get_camera_3d().look_at(mesh.get_aabb().get_center())
 
 func _process(d: float) -> void:
 	delta = d
@@ -47,10 +43,7 @@ func _process(d: float) -> void:
 		var path = "res://%s/%s" % [obj_files[fname], fname]
 		if path != selected_file:
 			selected_file = path
-			_clear_sub_viewport()
-			_render_to_sub_viewport(path)
 
-# TODO: Add to export when clicked
 func _on_add_button_pressed():
 	var selected_paths: PackedStringArray = []
 
@@ -72,22 +65,6 @@ func _on_add_button_pressed():
 	traverse.call(tree.get_root(), traverse)
 	generation_controller.add_selection(selected_paths)
 
-
-# TODO: fix jank
-# Renders the selected mesh to the viewport
-func _render_to_sub_viewport(file: String) -> void:
-	var array_mesh: ArrayMesh = load(file)
-	mesh = MeshInstance3D.new()
-	mesh.mesh = array_mesh
-	sub_viewport.add_child(mesh)
-	sub_viewport.get_camera_3d().look_at(mesh.get_aabb().get_center())
-
-
-# Clears the current sub viewport
-func _clear_sub_viewport():
-	if mesh:
-		mesh.queue_free()
-	mesh = null
 
 # Parses the selected object files to a dictionary
 #

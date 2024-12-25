@@ -1,9 +1,7 @@
 @tool
 extends Control
 
-@export var btn_add: Button
 @export var file_explorer: Control
-
 @export var generation_controller: Control
 
 const MAX_RECURSION: int = 100
@@ -29,29 +27,19 @@ func _ready():
 	EditorInterface.get_resource_filesystem().filesystem_changed.connect(func():
 		_recursively_scan_dir(fs)
 	)
+	file_explorer.add_selection.connect(_add_selection)
+
+	generation_controller.generate_all.connect(_generate_all)
+	generation_controller.dir_selected.connect(_set_out_dir)
+
 	file_explorer.render(filtered_fs)
 
+func _set_out_dir(path: String):
+	export_opts["output"]["dir"] = path
+
 func _on_add_button_pressed():
-	var selected_paths: PackedStringArray = []
-
-	var traverse = func(item: TreeItem, recurse: Callable):
-		if not item:
-			return
-		
-		if item.is_selected(0):
-			# Concat the URI components to a single string with
-			# a trailing "/"
-			var m: String = ""
-			for s in item.get_metadata(0):
-				m = m + s + "/"
-			selected_paths.append("%s%s" % [m, item.get_text(0)])
-
-		for c in item.get_children():
-			recurse.call(c, recurse)
-	
-	#Z traverse.call(tree.get_root(), traverse)
-	# generation_controller.add_selection(selected_paths)
-	_add_selection(selected_paths)
+	var selected_paths = file_explorer.get_selection()
+	print(selected_paths)
 
 func _add_selection(array: PackedStringArray) -> void:
 	for i in array:
@@ -87,7 +75,7 @@ func _render_files_for_export() -> void:
 
 	for i in export_opts["files"]:
 		var c = load("res://addons/obj-import-util/ui/main/ExportItem.tscn").instantiate()
-		c.file_path= i
+		c.file_path = i
 		c.removed.connect(func():
 			_remove_selection(i)
 		)
@@ -102,25 +90,56 @@ func _recursively_scan_dir(dir: EditorFileSystemDirectory) -> void:
 			var fpath = "%s%s" % [dir.get_path().split("res://")[1], dir.get_file(f)]
 			_parse_path(fpath)
 
+# Parse a path into the filtered_fs dictonary.
 func _parse_path(fpath: String) -> void:
+
+	# Split the path into its segments
 	var segments = fpath.split("/")
 
+	# If we only have 1 item and it's a .obj file, then add it to the root dir
 	if segments.size() == 1 and segments[0].match("*.obj"):
 		filtered_fs["files"].append(segments[0])
 		print(segments)
 		return
 
+	# Otherwise begin traversing the filtered_fs dict
 	var dict = filtered_fs["dirs"]
+
+	# Iterate over each segment
 	for s in segments.size():
+
+		# If it's not the terminal segment
 		if not segments[s].match("*.obj"):
+			# Add a new directory object if there isn't one already
 			if not dict.has(segments[s]):
-				dict [segments[s]] = {
+				dict[segments[s]] = {
 					"files": [],
 					"dirs": {}
 				}
+			# If we have more directories to traverse, keep going
 			if s < segments.size() - 2:
 				dict = dict[segments[s]]["dirs"]
 			else:
+				# Otherwise, we've reached the directory of where the file will go
 				dict = dict[segments[s]]
 		else:
+			# Add this file to the list contained in this directory
 			dict["files"].append(segments[s])
+
+
+func _generate(idx: int) -> void:
+
+	var obj_path = export_opts["files"][idx]
+	var fname = obj_path.split("/")[-1].split(".")[0]
+	var scene = PackedScene.new()
+
+	var new_fpath = "%s/%s.tscn" % [export_opts["output"]["dir"], fname]
+	var root = Node3D.new()
+	scene.pack(root)
+
+	print(new_fpath)
+	# ResourceSaver.save(scene, new_fpath)
+
+func _generate_all():
+	for idx in export_opts["files"].size():
+		_generate(idx)

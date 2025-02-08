@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://cqf1s0sx0gf2s"]
 
 [ext_resource type="PackedScene" uid="uid://ct2rumiyr17sx" path="res://addons/obj-import-util/ui/common/DeleteButton.tscn" id="1_g3xca"]
-[ext_resource type="Script" path="res://addons/obj-import-util/ui/main/C_ExportItem.gd" id="1_louxd"]
+[ext_resource type="Script" path="res://addons/obj-import-util/ui/main/ExportItem.gd" id="1_louxd"]
 
 [sub_resource type="Image" id="Image_ge8rx"]
 data = {

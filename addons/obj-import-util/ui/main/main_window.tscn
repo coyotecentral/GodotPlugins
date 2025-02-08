@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://b3kq62sr254fc"]
+
+[ext_resource type="PackedScene" uid="uid://dqgec0s25vbyf" path="res://addons/obj-import-util/ui/main/main.tscn" id="1_vndjr"]
+
+[node name="MainWindow" type="Window"]
+title = "OBJ Import Util"
+initial_position = 4
+size = Vector2i(1280, 720)
+
+[node name="Control" parent="." instance=ExtResource("1_vndjr")]

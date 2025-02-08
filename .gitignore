@@ -22,3 +22,5 @@ Assets
 .DS_Store
 
 barbarian_2.tscn
+
+addons/godot-plugin-refresher

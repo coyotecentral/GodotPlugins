@@ -1,0 +1,71 @@
+[gd_scene load_steps=4 format=3 uid="uid://dqgec0s25vbyf"]
+
+[ext_resource type="Script" path="res://addons/obj-import-util/ui/main/main.gd" id="1_hrunr"]
+[ext_resource type="PackedScene" uid="uid://ddwla8bm35bxs" path="res://addons/obj-import-util/ui/main/FileExplorer.tscn" id="2_1dor6"]
+[ext_resource type="PackedScene" uid="uid://t7yml2plxbgp" path="res://addons/obj-import-util/ui/main/GenerationConfig.tscn" id="3_2ftdu"]
+
+[node name="Control" type="Control" node_paths=PackedStringArray("file_explorer", "generation_controller")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_hrunr")
+file_explorer = NodePath("MarginContainer/HBoxContainer/FileExplorer")
+generation_controller = NodePath("MarginContainer/HBoxContainer/GenerationConfig")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="FileExplorer" parent="MarginContainer/HBoxContainer" instance=ExtResource("2_1dor6")]
+layout_mode = 2
+
+[node name="SelectedFiles" type="MarginContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/HBoxContainer/SelectedFiles"]
+layout_mode = 2
+
+[node name="ItemList" type="VBoxContainer" parent="MarginContainer/HBoxContainer/SelectedFiles/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Empty" type="CenterContainer" parent="MarginContainer/HBoxContainer/SelectedFiles"]
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/SelectedFiles/Empty"]
+self_modulate = Color(0, 0, 0, 0.333333)
+custom_minimum_size = Vector2(256, 128)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/SelectedFiles/Empty/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "No items selected"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/SelectedFiles"]
+show_behind_parent = true
+layout_mode = 2
+mouse_filter = 2
+
+[node name="GenerationConfig" parent="MarginContainer/HBoxContainer" instance=ExtResource("3_2ftdu")]
+layout_mode = 2

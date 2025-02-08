@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3 uid="uid://ddwla8bm35bxs"]
+
+[ext_resource type="Script" path="res://addons/obj-import-util/ui/main/FileExplorer.gd" id="1_5h2sj"]
+
+[node name="FileExplorer" type="VBoxContainer"]
+custom_minimum_size = Vector2(512, 0)
+script = ExtResource("1_5h2sj")
+
+[node name="Search(TODO)" type="LineEdit" parent="."]
+visible = false
+layout_mode = 2
+placeholder_text = "Search"
+
+[node name="Tree" type="Tree" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+select_mode = 2
+
+[node name="Btn_Add" type="Button" parent="."]
+layout_mode = 2
+text = "Add"

@@ -17,7 +17,8 @@ var export_opts: Dictionary = {
 	"files": PackedStringArray([]),
 	"output": {
 		"dir": ""
-	}
+	},
+	"dry_run": true
 }
 
 func _ready():
@@ -137,8 +138,10 @@ func _generate(idx: int) -> void:
 	var root = Node3D.new()
 	scene.pack(root)
 
-	print(new_fpath)
-	# ResourceSaver.save(scene, new_fpath)
+	if export_opts["dry_run"]:
+		print(new_fpath)
+	else:
+		ResourceSaver.save(scene, new_fpath)
 
 func _generate_all():
 	for idx in export_opts["files"].size():

@@ -1,5 +1,5 @@
 @tool
-extends CoyoteCharacter3D
+extends KayKitDungeonCharacter
 class_name Knight
 
 var _scene: PackedScene = preload("res://addons/kaykit-dungeon-kit/characters/knight/knight.tscn")

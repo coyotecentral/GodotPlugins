@@ -1,0 +1,95 @@
+[gd_scene load_steps=15 format=3 uid="uid://bsejac6ns3i21"]
+
+[ext_resource type="PackedScene" uid="uid://c44p1vqrg7jch" path="res://addons/kaykit-dungeon-kit/characters/barbarian/rig.tscn" id="1_7dw6h"]
+[ext_resource type="Script" path="res://addons/kaykit-dungeon-kit/characters/barbarian/_barbarian.gd" id="1_7voax"]
+[ext_resource type="AnimationLibrary" uid="uid://bi4xurjrp14xt" path="res://addons/kaykit-dungeon-kit/characters/common/resources/animations.res" id="2_fnk1o"]
+[ext_resource type="Script" path="res://addons/kaykit-dungeon-kit/characters/lib/CharacterStateMachine.gd" id="3_e4jur"]
+[ext_resource type="Script" path="res://addons/kaykit-dungeon-kit/characters/common/scripts/states/Idle.gd" id="3_gaqxg"]
+[ext_resource type="Script" path="res://addons/kaykit-dungeon-kit/characters/common/scripts/states/Running.gd" id="4_70x0g"]
+[ext_resource type="Script" path="res://addons/kaykit-dungeon-kit/characters/common/scripts/PlayerMovementController.gd" id="5_q0j0i"]
+[ext_resource type="Script" path="res://addons/kaykit-dungeon-kit/characters/common/scripts/states/StrafeLeft.gd" id="5_vfma0"]
+[ext_resource type="Script" path="res://addons/kaykit-dungeon-kit/characters/common/scripts/states/StrafeRight.gd" id="6_s6tjo"]
+[ext_resource type="Script" path="res://addons/kaykit-dungeon-kit/characters/common/scripts/states/Jump.gd" id="9_2o6iq"]
+[ext_resource type="Script" path="res://addons/kaykit-dungeon-kit/characters/common/scripts/states/Fall.gd" id="10_cc3yi"]
+[ext_resource type="AnimationNodeBlendTree" uid="uid://b8shgd1jpp7mh" path="res://addons/kaykit-dungeon-kit/characters/common/resources/animation_blend_tree.tres" id="12_6myd7"]
+[ext_resource type="Script" path="res://addons/kaykit-dungeon-kit/characters/common/scripts/AnimationController.gd" id="13_41f07"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_et7cq"]
+height = 2.5
+
+[node name="Barbarian" type="CharacterBody3D"]
+script = ExtResource("1_7voax")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+shape = SubResource("CapsuleShape3D_et7cq")
+
+[node name="Rig" parent="." instance=ExtResource("1_7dw6h")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"animations": ExtResource("2_fnk1o")
+}
+
+[node name="MovementStateMachine" type="Node" parent="." node_paths=PackedStringArray("animation_tree", "movement_controller", "starting_state")]
+script = ExtResource("3_e4jur")
+animation_tree = NodePath("../AnimationTree")
+movement_controller = NodePath("../InputController")
+playback_parameter_path = "parameters/MovementStateMachine/playback"
+starting_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="MovementStateMachine" node_paths=PackedStringArray("running", "strafe_right", "strafe_left", "fall", "jump")]
+script = ExtResource("3_gaqxg")
+running = NodePath("../Running")
+strafe_right = NodePath("../StrafeRight")
+strafe_left = NodePath("../StrafeLeft")
+fall = NodePath("../Fall")
+jump = NodePath("../Jump")
+animation_tree_node = "Idle"
+
+[node name="Running" type="Node" parent="MovementStateMachine" node_paths=PackedStringArray("idle", "strafe_left", "strafe_right", "jump")]
+script = ExtResource("4_70x0g")
+idle = NodePath("../Idle")
+strafe_left = NodePath("../StrafeLeft")
+strafe_right = NodePath("../StrafeRight")
+jump = NodePath("../Jump")
+animation_tree_node = "Running"
+
+[node name="StrafeLeft" type="Node" parent="MovementStateMachine" node_paths=PackedStringArray("idle", "running", "strafe_right", "jump")]
+script = ExtResource("5_vfma0")
+idle = NodePath("../Idle")
+running = NodePath("../Running")
+strafe_right = NodePath("../StrafeRight")
+jump = NodePath("../Jump")
+animation_tree_node = "StrafeLeft"
+
+[node name="StrafeRight" type="Node" parent="MovementStateMachine" node_paths=PackedStringArray("idle", "running", "strafe_left", "jump")]
+script = ExtResource("6_s6tjo")
+idle = NodePath("../Idle")
+running = NodePath("../Running")
+strafe_left = NodePath("../StrafeLeft")
+jump = NodePath("../Jump")
+animation_tree_node = "StrafeRight"
+
+[node name="Jump" type="Node" parent="MovementStateMachine" node_paths=PackedStringArray("fall_state")]
+script = ExtResource("9_2o6iq")
+fall_state = NodePath("../Fall")
+animation_tree_node = "Jump"
+
+[node name="Fall" type="Node" parent="MovementStateMachine" node_paths=PackedStringArray("idle", "running")]
+script = ExtResource("10_cc3yi")
+idle = NodePath("../Idle")
+running = NodePath("../Running")
+animation_tree_node = "Fall"
+
+[node name="InputController" type="Node" parent="."]
+script = ExtResource("5_q0j0i")
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = ExtResource("12_6myd7")
+anim_player = NodePath("../AnimationPlayer")
+parameters/AttackOneShot/active = false
+parameters/AttackOneShot/internal_active = false
+parameters/AttackOneShot/request = 0
+parameters/Blend2/blend_amount = 0.0
+script = ExtResource("13_41f07")
